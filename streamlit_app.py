@@ -222,6 +222,23 @@ html, body, [class*="css"] {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.4; }
 }
+
+/* ── Pin Input Form to Bottom ── */
+div[data-testid="stForm"] {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 860px;
+    background: linear-gradient(135deg, #0f0c29 0%, #1e1b4b 100%) !important;
+    backdrop-filter: blur(20px);
+    z-index: 999;
+    padding: 1rem !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -438,3 +455,6 @@ with st.form(key="chat_form", clear_on_submit=True):
 
 if submitted and user_input:
     process_prompt(user_input)
+
+# Spacer at the bottom to prevent the pinned chat input from overlapping with the messages
+st.markdown("<div style='height: 140px;'></div>", unsafe_allow_html=True)

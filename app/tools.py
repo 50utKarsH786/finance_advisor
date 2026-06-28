@@ -22,9 +22,26 @@ def clean_company_query(query: str) -> str:
     filtered = [word for word in words if word not in remove_words]
     return " ".join(filtered).strip()
 
+COMMON_COMPANY_TICKERS = {
+    "apple": "AAPL",
+    "tesla": "TSLA",
+    "google": "GOOGL",
+    "microsoft": "MSFT",
+    "amazon": "AMZN",
+    "meta": "META",
+    "netflix": "NFLX",
+    "intel": "INTC",
+    "cisco": "CSCO",
+    "nvidia": "NVDA",
+    "amd": "AMD",
+    "ford": "F",
+    "disney": "DIS",
+    "sony": "SONY",
+}
+
 def looks_like_ticker(text: str) -> bool:
     text = text.strip().upper()
-    return text.isalpha() and 1 <= len(text) <= 5
+    return text.isalpha() and 1 <= len(text) <= 4
 
 async def fetch_api(params: dict) -> dict:
     async with httpx.AsyncClient() as client:
@@ -37,6 +54,16 @@ async def search_symbol_from_query(query: str) -> dict | None:
 
     if not cleaned_query:
         return None
+
+    # Check common company name mappings first to resolve instantly and save API calls
+    cleaned_lower = cleaned_query.lower()
+    if cleaned_lower in COMMON_COMPANY_TICKERS:
+        ticker = COMMON_COMPANY_TICKERS[cleaned_lower]
+        return {
+            "symbol": ticker,
+            "name": cleaned_query.title(),
+            "match_score": "1.0000"
+        }
 
     if looks_like_ticker(cleaned_query):
         return {
