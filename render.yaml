@@ -1,0 +1,38 @@
+services:
+  # ── FastAPI Backend (Render Free Tier) ───────────────────────────────────────
+  - type: web
+    name: finance-advisor-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false              # Set manually in Render dashboard → Environment
+      - key: ALPHA_VANTAGE_API_KEY
+        sync: false              # Set manually in Render dashboard → Environment
+      - key: MODEL_NAME
+        value: gemini-2.5-flash
+      - key: FALLBACK_MODEL_NAME
+        value: gemini-1.5-flash
+      - key: RATE_LIMIT_STRING
+        value: 10/minute
+      - key: ALLOWED_ORIGINS
+        value: '["*"]'
+      - key: CHROMA_DIR
+        value: chroma_db
+      - key: DOCS_DIR
+        value: documents
+
+  # ── Streamlit UI (Render Free Tier) ──────────────────────────────────────────
+  - type: web
+    name: finance-advisor-ui
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements_streamlit.txt
+    startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: API_URL
+        value: http://finance-advisor-api:8000
+

@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-dotenv
+requests
+langchain
+langchain-community
+langchain-chroma
+chromadb
+pypdf
+google-generativeai
+langchain-google-genai
+httpx
+pydantic-settings
+cachetools
+slowapi
+langgraph

@@ -1,0 +1,17 @@
+# Virtual Environment
+.venv/
+
+# Environment Variables
+.env
+
+# Temp and Cache Directories
+.temp/
+.pip_cache/
+__pycache__/
+*.pyc
+
+# Database
+chroma_db/
+
+# Streamlit secrets (never commit — set in Streamlit Cloud dashboard)
+.streamlit/secrets.toml
