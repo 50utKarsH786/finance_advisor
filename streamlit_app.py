@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 import time
+import os
+
 
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -235,9 +237,17 @@ if "pending_prompt" not in st.session_state:
 with st.sidebar:
     st.markdown("## ⚙️ Settings")
 
+    # Resolve API URL safely: check environment variable first, then st.secrets, then default to localhost
+    api_url_default = os.getenv("API_URL")
+    if not api_url_default:
+        try:
+            api_url_default = st.secrets.get("API_URL", "http://localhost:8000")
+        except Exception:
+            api_url_default = "http://localhost:8000"
+
     api_url = st.text_input(
         "Backend API URL",
-        value=st.secrets.get("API_URL", "http://localhost:8000"),
+        value=api_url_default,
         help="Your Render FastAPI service URL",
         key="api_url_input",
     )
