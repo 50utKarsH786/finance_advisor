@@ -12,10 +12,12 @@ def is_quota_error(e: Exception) -> bool:
     return "resource_exhausted" in msg or "quota" in msg or "429" in msg
 
 @router.get("/")
+@router.head("/")
 def home():
     return {"message": "Finance agentic chatbot API is running"}
 
 @router.get("/health")
+@router.head("/health")
 def health():
     return {"status": "healthy"}
 
