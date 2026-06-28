@@ -30,7 +30,17 @@ async def chat(req: ChatRequest, request: Request):
         result = await app_graph.ainvoke(inputs)
         
         # Extract the last AI message
-        final_message = result["messages"][-1].content
+        raw_content = result["messages"][-1].content
+        
+        # Safely convert to string, extracting from content blocks if list
+        if isinstance(raw_content, list):
+            final_message = "".join(
+                block.get("text", "") if isinstance(block, dict) else str(block)
+                for block in raw_content
+            )
+        else:
+            final_message = str(raw_content)
+            
         return ChatResponse(answer=final_message)
     except Exception as e:
         if is_quota_error(e):
