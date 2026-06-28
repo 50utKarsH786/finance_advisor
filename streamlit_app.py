@@ -347,7 +347,14 @@ for msg in st.session_state.messages:
 
 # ── API Call ──────────────────────────────────────────────────────────────────
 def call_api(query: str, base_url: str) -> str:
-    url = base_url.rstrip("/") + "/chat"
+    # Resolve and clean base URL, fallback if empty or invalid
+    clean_base = base_url.strip() if base_url else ""
+    if not clean_base or not clean_base.startswith("http"):
+        clean_base = os.getenv("API_URL", "http://localhost:8000")
+        if not clean_base.startswith("http"):
+            clean_base = "http://localhost:8000"
+
+    url = clean_base.rstrip("/") + "/chat"
     try:
         resp = requests.post(
             url,
