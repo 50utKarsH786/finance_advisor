@@ -34,5 +34,5 @@ services:
     startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: API_URL
-        value: http://finance-advisor-api:8000
+        value: http://finance-advisor-api:10000
 
